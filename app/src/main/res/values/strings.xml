@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FindFlights</string>
+    <string name="number_of_teens">Number of teens</string>
+    <string name="number_of_children">Number of children</string>
+    <string name="origin_station">Origin station</string>
+    <string name="destination_station">Destination station</string>
+    <string name="search">Search</string>
+    <string name="number_of_adults">Number of adults</string>
 </resources>

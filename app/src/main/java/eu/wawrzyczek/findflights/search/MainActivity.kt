@@ -1,7 +1,8 @@
-package eu.wawrzyczek.findflights
+package eu.wawrzyczek.findflights.search
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import eu.wawrzyczek.findflights.R
 
 class MainActivity : AppCompatActivity() {
 

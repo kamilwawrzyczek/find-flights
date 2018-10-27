@@ -15,15 +15,21 @@
         <activity
             android:name=".search.FlightSearchActivity"
             android:label="@string/find_flights">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".flights.FlightsActivity"
+            android:parentActivityName=".search.FlightSearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".flights.FlightsActivity"
-            android:parentActivityName=".search.FlightSearchActivity" />
     </application>
 
 </manifest>

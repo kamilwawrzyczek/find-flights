@@ -9,7 +9,7 @@ import eu.wawrzyczek.findflights.common.SimpleDate
 import eu.wawrzyczek.findflights.search.model.SearchData
 import eu.wawrzyczek.findflights.search.model.Station
 
-class FlightSearchViewModel(dateProvider: DateProvider) : ViewModel() { //todo test
+class FlightSearchViewModel(dateProvider: DateProvider) : ViewModel() {
     val origin: ObservableField<Station> = ObservableField(Station())   //todo show error when not valid
     val destination: ObservableField<Station> = ObservableField(Station())
 

@@ -6,16 +6,20 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import eu.wawrzyczek.findflights.R
+import eu.wawrzyczek.findflights.common.AutocompleteAdapter
 import eu.wawrzyczek.findflights.common.SimpleDate
 import eu.wawrzyczek.findflights.common.setTextListener
 import eu.wawrzyczek.findflights.databinding.ActivityFlightSearchBinding
+import eu.wawrzyczek.findflights.filtering.DefaultFilteredDataProvider
 import eu.wawrzyczek.findflights.search.model.Station
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val MAX_TICKETS_IN_ONE_SEARCH = 10
 
 class FlightSearchActivity : AppCompatActivity() {
     private val flightSearchViewModel: FlightSearchViewModel by viewModel()
+    private val stationMatchingStrategy: StationMatchingStrategy by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,14 @@ class FlightSearchActivity : AppCompatActivity() {
         binding.adults.adapter = createSimpleIntAdapter()
         binding.teens.adapter = createSimpleIntAdapter()
         binding.children.adapter = createSimpleIntAdapter()
-        //TODO add autocomplete behavior
+        prepareAutocompleteAdapter(binding)
+    }
+
+    private fun prepareAutocompleteAdapter(binding: ActivityFlightSearchBinding) {
+        val stations = listOf(Station(name = "aaaa"), Station(name = "bbb"))
+        val dataProvider = DefaultFilteredDataProvider(stations, stationMatchingStrategy)
+        binding.origin.setAdapter(AutocompleteAdapter(dataProvider))
+        binding.destination.setAdapter(AutocompleteAdapter(dataProvider))
     }
 
     private fun showDatePicker(date: SimpleDate, callback: (SimpleDate) -> Unit) {

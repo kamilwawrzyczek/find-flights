@@ -5,4 +5,5 @@ import org.koin.dsl.module.module
 
 val flightSearchModule = module {
     viewModel { FlightSearchViewModel(get()) }
+    single { StationMatchingStrategy() }
 }

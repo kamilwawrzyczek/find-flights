@@ -37,7 +37,7 @@ class FlightsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<ActivityFlightsBinding>(this, R.layout.activity_flights)
         binding.vm = flightsViewModel
-        prepareRecyclerView(binding)
+        prepareRecyclerView(binding)//todo try again clicklistener
 
         val data = flightsViewModel.searchData
         title = data.origin.name + " > " + data.destination.name

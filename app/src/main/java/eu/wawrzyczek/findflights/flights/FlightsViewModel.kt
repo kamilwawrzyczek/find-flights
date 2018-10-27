@@ -2,16 +2,13 @@ package eu.wawrzyczek.findflights.flights
 
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
-import eu.wawrzyczek.findflights.common.SimpleDateTime
 import eu.wawrzyczek.findflights.common.toAsync
 import eu.wawrzyczek.findflights.flights.model.Flight
+import eu.wawrzyczek.findflights.flights.search.SearchRepository
 import eu.wawrzyczek.findflights.search.model.SearchData
-import eu.wawrzyczek.findflights.search.model.Station
 import io.reactivex.Single
-import java.util.*
-import java.util.concurrent.TimeUnit
 
-class FlightsViewModel(val searchData: SearchData) : ViewModel() {
+class FlightsViewModel(val searchData: SearchData, private val searchRepository: SearchRepository) : ViewModel() {
     private var flightList = emptyList<Flight>()
 
     val searching = ObservableBoolean()
@@ -32,17 +29,7 @@ class FlightsViewModel(val searchData: SearchData) : ViewModel() {
             .switchIfEmpty(getFlightsFromRepository())
 
     private fun getFlightsFromRepository(): Single<List<Flight>> {
-        return Single.defer { // todo make api call
-            Single.just(
-                listOf<Flight>(
-                    Flight(
-                        SimpleDateTime(2018, 5, 1, 12, 35),
-                        "FR 123", "12:33", "12.35", Currency.getInstance("EUR"),
-                        Station(), Station(), 0, "", 0
-                    )
-                )
-            ).delay(5, TimeUnit.SECONDS)
-        }
+        return Single.defer { searchRepository.getFlights(searchData) }
             .doOnSubscribe { searching.set(true) }
             .doOnSuccess {
                 flightList = it

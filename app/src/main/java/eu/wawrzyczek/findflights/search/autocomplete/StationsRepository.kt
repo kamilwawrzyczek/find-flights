@@ -11,8 +11,9 @@ class StationsRepository(private val client: StationsClient) {
     fun getStations() : Single<List<Station>> = cachedValues
         .switchIfEmpty(getStationsFromWeb())
 
-    private fun getStationsFromWeb(): Single<List<Station>> = client.getStations()
+    private fun getStationsFromWeb(): Single<List<Station>> = Single.defer { client.getStations() }
         .flatMapObservable { Observable.fromIterable(it.stations) }
         .map { Station(it.code, it.name, it.alternateName) }
         .toList()
+        .doOnSuccess { cachedValues = Maybe.just(it) }
 }

@@ -43,7 +43,11 @@ class FlightSearchViewModel(
 
     val stations: Single<List<Station>>
         get() = stationsRepository.getStations()
-            .doOnSuccess { stationsMap = it.associate { station -> station.name to station } }
+            .doOnSuccess {
+                stationsMap = it.associate { station -> station.name to station }
+                origin.set(origin.get())
+                destination.set(destination.get())
+            }
             .toAsync()
 
     fun search() {

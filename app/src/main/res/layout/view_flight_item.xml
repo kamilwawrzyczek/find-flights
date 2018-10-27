@@ -2,6 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="data"
+            type="eu.wawrzyczek.findflights.flights.model.Flight"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,7 +18,6 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
-
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
@@ -22,7 +27,7 @@
             android:layout_marginBottom="16dp"
             android:drawableStart="@drawable/ic_date"
             android:gravity="center"
-            android:text="12.10.2018"
+            android:text="@{data.date.formattedString}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/flightNumber" />
@@ -33,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="#FR 2013"
+            android:text="@{@string/id(data.flightNumber)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +49,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="01:25"
+            android:text="@{data.duration}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/flightNumber"
@@ -58,7 +63,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="36.71 EUR"
+            android:text="@{data.priceFormatted}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

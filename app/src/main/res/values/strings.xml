@@ -9,4 +9,22 @@
     <string name="number_of_adults">Number of adults</string>
     <string name="retry">Retry</string>
     <string name="stations_download_error">Getting available stations failed!</string>
+
+    <string name="id" translatable="false">#%s</string>
+    <string name="empty_flights">No flights found with this search criteria, go back and try different date.</string>
+    <string name="flights_error">Flight search failed. Check internet connection and try again.</string>
+    <string name="try_again">Try again</string>
+    <plurals name="x_adults">
+        <item quantity="one">%d adult</item>
+        <item quantity="other">%d adults</item>
+    </plurals>
+    <plurals name="x_teens">
+        <item quantity="one">%d teen</item>
+        <item quantity="other">%d teens</item>
+    </plurals>
+    <plurals name="x_childs">
+        <item quantity="one">%d child</item>
+        <item quantity="other">%d childs</item>
+    </plurals>
+
 </resources>

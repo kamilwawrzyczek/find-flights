@@ -3,13 +3,20 @@ package eu.wawrzyczek.findflights.flights
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import eu.wawrzyczek.findflights.R
 import eu.wawrzyczek.findflights.databinding.ViewFlightItemBinding
+import eu.wawrzyczek.findflights.flights.model.Flight
 
-class FlightsAdapter : RecyclerView.Adapter<FlightsAdapter.ViewHolder>() {
-    private val items = listOf("a", "B")
+typealias ClickListener = (Flight) -> Unit
+
+class FlightsAdapter(private val clickListener: ClickListener) : RecyclerView.Adapter<FlightsAdapter.ViewHolder>() {
+    private var items = emptyList<Flight>()
+
+    fun updateItems(items:List<Flight>) {
+        this.items = items
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -19,12 +26,14 @@ class FlightsAdapter : RecyclerView.Adapter<FlightsAdapter.ViewHolder>() {
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], clickListener)
     }
 
-    class ViewHolder(binding: ViewFlightItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
-            //todo bind item
+    class ViewHolder(private val binding: ViewFlightItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(flight: Flight, clickListener: ClickListener) {
+            binding.data = flight
+            binding.root.setOnClickListener { clickListener.invoke(flight) }
+            binding.executePendingBindings()
         }
     }
 }

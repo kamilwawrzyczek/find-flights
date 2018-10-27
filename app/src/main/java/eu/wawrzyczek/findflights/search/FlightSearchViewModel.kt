@@ -4,6 +4,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
+import eu.wawrzyczek.findflights.common.AppNavigator
 import eu.wawrzyczek.findflights.common.DateProvider
 import eu.wawrzyczek.findflights.common.SimpleDate
 import eu.wawrzyczek.findflights.common.toAsync
@@ -14,7 +15,8 @@ import io.reactivex.Single
 
 class FlightSearchViewModel(
     dateProvider: DateProvider,
-    private val stationsRepository: StationsRepository
+    private val stationsRepository: StationsRepository,
+    private val appNavigator: AppNavigator
 ) : ViewModel() {
     var stationsMap: Map<String, Station> = emptyMap()
 
@@ -52,7 +54,7 @@ class FlightSearchViewModel(
             origin.get()!!, destination.get()!!, departureDate.get()!!,
             adults.get(), teens.get(), children.get()
         )
-        //todo open activity with results
+        appNavigator.navigateToFlightActivity(data)
     }
 
     private fun isDataValid(): Boolean {

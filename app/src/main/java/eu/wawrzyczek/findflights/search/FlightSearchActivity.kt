@@ -1,24 +1,31 @@
 package eu.wawrzyczek.findflights.search
 
 import android.app.DatePickerDialog
-import android.databinding.DataBindingUtil
-import android.support.v7.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import eu.wawrzyczek.findflights.R
 import eu.wawrzyczek.findflights.common.SimpleDate
+import eu.wawrzyczek.findflights.common.setTextListener
 import eu.wawrzyczek.findflights.databinding.ActivityFlightSearchBinding
+import eu.wawrzyczek.findflights.search.model.Station
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val MAX_TICKETS_IN_ONE_SEARCH = 10
 
 class FlightSearchActivity : AppCompatActivity() {
+    private val flightSearchViewModel: FlightSearchViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<ActivityFlightSearchBinding>(this, R.layout.activity_flight_search)
+        binding.vm = flightSearchViewModel
+        binding.origin.setTextListener { flightSearchViewModel.origin.set(Station(name = it)) }
+        binding.destination.setTextListener { flightSearchViewModel.origin.set(Station(name = it)) }
         binding.departureDate.setOnClickListener { _ ->
-            showDatePicker {
-                // todo handle data
+            showDatePicker(flightSearchViewModel.departureDate.get()!!) {
+                flightSearchViewModel.departureDate.set(it)
             }
         }
         binding.adults.adapter = createSimpleIntAdapter()
@@ -27,11 +34,11 @@ class FlightSearchActivity : AppCompatActivity() {
         //TODO add autocomplete behavior
     }
 
-    private fun showDatePicker(callback: (SimpleDate) -> Unit) {
+    private fun showDatePicker(date: SimpleDate, callback: (SimpleDate) -> Unit) {
         DatePickerDialog(
             this, { _, year, month, dayOfMonth ->
                 callback.invoke(SimpleDate(year, month, dayOfMonth))
-            }, 5, 1, 1992
+            }, date.year, date.month, date.dayOfMonth
         ).show()
     }
 

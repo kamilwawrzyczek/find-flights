@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <data>
+
+        <variable
+            name="vm"
+            type="eu.wawrzyczek.findflights.search.FlightSearchViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".search.FlightSearchActivity"
@@ -20,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -52,6 +59,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:dropDownWidth="@dimen/dropdown_width"
+                    android:selectedItemPosition="@={vm.teens}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/teensLabel"
@@ -66,6 +74,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:dropDownWidth="@dimen/dropdown_width"
+                    android:selectedItemPosition="@={vm.children}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -84,6 +93,7 @@
                     android:drawablePadding="@dimen/drawable_padding"
                     android:hint="@string/origin_station"
                     android:lines="1"
+                    android:text="@{vm.origin.name}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -98,6 +108,7 @@
                     android:drawablePadding="@dimen/drawable_padding"
                     android:hint="@string/destination_station"
                     android:lines="1"
+                    android:text="@{vm.destination.name}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/origin" />
@@ -110,6 +121,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:dropDownWidth="@dimen/dropdown_width"
+                    android:selectedItemPosition="@={vm.adults}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/adultsLabel"
@@ -124,10 +136,11 @@
                     android:layout_marginEnd="8dp"
                     android:drawableStart="@drawable/ic_date"
                     android:drawablePadding="@dimen/drawable_padding"
-                    android:ems="10"adoults
+                    android:ems="10"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="date"
+                    android:text="@{vm.departureDate.formattedString}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/destination" />
@@ -143,7 +156,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/adults"
                     app:layout_constraintVertical_bias="0.6" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
         <Button
@@ -151,10 +164,12 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:enabled="@{vm.valid}"
+            android:onClick="@{(v) -> vm.search()}"
             android:text="@string/search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

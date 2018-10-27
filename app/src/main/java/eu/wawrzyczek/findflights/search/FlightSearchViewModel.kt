@@ -6,12 +6,29 @@ import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import eu.wawrzyczek.findflights.common.DateProvider
 import eu.wawrzyczek.findflights.common.SimpleDate
+import eu.wawrzyczek.findflights.common.toAsync
+import eu.wawrzyczek.findflights.search.autocomplete.StationsRepository
 import eu.wawrzyczek.findflights.search.model.SearchData
 import eu.wawrzyczek.findflights.search.model.Station
+import io.reactivex.Single
 
-class FlightSearchViewModel(dateProvider: DateProvider) : ViewModel() {
-    val origin: ObservableField<Station> = ObservableField(Station())   //todo show error when not valid
-    val destination: ObservableField<Station> = ObservableField(Station())
+class FlightSearchViewModel(
+    dateProvider: DateProvider,
+    private val stationsRepository: StationsRepository
+) : ViewModel() {
+    var stationsMap: Map<String, Station> = emptyMap()
+
+    //todo show error when not valid
+    val origin: ObservableField<Station> = object : ObservableField<Station>(Station()) {
+        override fun set(value: Station) {
+            super.set(stationsMap.getOrElse(value.name) { value })
+        }
+    }
+    val destination: ObservableField<Station> = object : ObservableField<Station>(Station()) {
+        override fun set(value: Station) {
+            super.set(stationsMap.getOrElse(value.name) { value })
+        }
+    }
 
     val adults: ObservableInt = ObservableInt(1)
     val teens: ObservableInt = ObservableInt(0)
@@ -21,6 +38,11 @@ class FlightSearchViewModel(dateProvider: DateProvider) : ViewModel() {
     val valid: ObservableBoolean = object : ObservableBoolean(origin, destination, adults, teens, children) {
         override fun get(): Boolean = isDataValid()
     }
+
+    val stations: Single<List<Station>>
+        get() = stationsRepository.getStations()
+            .doOnSuccess { stationsMap = it.associate { station -> station.name to station } }
+            .toAsync()
 
     fun search() {
         if (!valid.get()) return

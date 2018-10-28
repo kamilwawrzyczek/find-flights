@@ -2,13 +2,15 @@ package eu.wawrzyczek.findflights.flights
 
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
+import eu.wawrzyczek.findflights.common.AppNavigator
 import eu.wawrzyczek.findflights.common.toAsync
 import eu.wawrzyczek.findflights.flights.model.Flight
 import eu.wawrzyczek.findflights.flights.search.SearchRepository
 import eu.wawrzyczek.findflights.search.model.SearchData
 import io.reactivex.Single
 
-class FlightsViewModel(val searchData: SearchData, private val searchRepository: SearchRepository) : ViewModel() {
+class FlightsViewModel(val searchData: SearchData, private val searchRepository: SearchRepository,
+                       private val navigator: AppNavigator) : ViewModel() {
     private var flightList = emptyList<Flight>()
 
     val searching = ObservableBoolean()
@@ -42,7 +44,7 @@ class FlightsViewModel(val searchData: SearchData, private val searchRepository:
     }
 
     fun flightClick(flight: Flight) {
-        // todo implement
+        navigator.navigateToFlightDetailsActivity(flight)
     }
 
 }

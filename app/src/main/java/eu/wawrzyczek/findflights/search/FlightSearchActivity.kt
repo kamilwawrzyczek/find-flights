@@ -62,8 +62,8 @@ class FlightSearchActivity : AppCompatActivity() {
     private fun showDatePicker(date: SimpleDate, callback: (SimpleDate) -> Unit) {
         DatePickerDialog(
             this, { _, year, month, dayOfMonth ->
-                callback.invoke(SimpleDate(year, month, dayOfMonth))
-            }, date.year, date.month, date.dayOfMonth
+                callback.invoke(SimpleDate(year, month + 1, dayOfMonth))
+            }, date.year, date.month - 1, date.dayOfMonth
         ).show()
     }
 

@@ -9,7 +9,7 @@ import java.util.*
 @Parcelize
 data class SimpleDateTime(val year: Int, val month: Int, val dayOfMonth: Int, val hour : Int, val minute: Int) : Parcelable {
     @IgnoredOnParcel
-    val date: Date = GregorianCalendar(year, month, dayOfMonth, hour, minute).time
+    val date: Date = GregorianCalendar(year, month-1, dayOfMonth, hour, minute).time
     @IgnoredOnParcel
     val formattedString: String = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.getDefault()).format(date)
 }

@@ -6,5 +6,5 @@ import org.koin.dsl.module.module
 
 val flightsModule = module {
     single { SearchRepository(get()) }
-    viewModel { params -> FlightsViewModel(params[0], get()) }
+    viewModel { params -> FlightsViewModel(params[0], get(), get()) }
 }

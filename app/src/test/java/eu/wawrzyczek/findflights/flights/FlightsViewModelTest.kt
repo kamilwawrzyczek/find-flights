@@ -1,19 +1,38 @@
 package eu.wawrzyczek.findflights.flights
 
+import androidx.databinding.Observable
+import com.nhaarman.mockito_kotlin.*
+import eu.wawrzyczek.findflights.common.AppNavigator
 import eu.wawrzyczek.findflights.common.SimpleDate
+import eu.wawrzyczek.findflights.common.SimpleDateTime
+import eu.wawrzyczek.findflights.createFlight
+import eu.wawrzyczek.findflights.flights.model.FareType
+import eu.wawrzyczek.findflights.flights.model.Flight
+import eu.wawrzyczek.findflights.flights.model.Price
+import eu.wawrzyczek.findflights.flights.search.SearchRepository
 import eu.wawrzyczek.findflights.search.model.SearchData
 import eu.wawrzyczek.findflights.search.model.Station
+import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.lang.RuntimeException
+import java.math.BigDecimal
+import java.util.*
 
 class FlightsViewModelTest {
     private val searchData = SearchData(Station(code = "DUB", name = "Dublin"), Station(code = "STN", name = "London Stansted"),
         SimpleDate(2015, 10, 5), 1, 0, 0)
-    private val flightsViewModel = FlightsViewModel(searchData)
+    private val flight = createFlight()
+
+    private val searchRepository : SearchRepository = mock {
+        on { getFlights(searchData) }.thenReturn(Single.just(listOf(flight)))
+    }
+    private val navigator : AppNavigator = mock {  }
+    private val flightsViewModel = FlightsViewModel(searchData, searchRepository, navigator)
 
     @Before
     fun setUp() {
@@ -63,16 +82,25 @@ class FlightsViewModelTest {
 
     @Test
     fun `flights should get flights from repository`() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val test = flightsViewModel.flights.test()
+        test.assertValue(listOf(flight))
+        verify(searchRepository).getFlights(searchData)
     }
 
     @Test
     fun `flights should set progress to true on start and to false on stop`() {
-        val testObserver = flightsViewModel.flights.test()
+        val values = mutableListOf<Boolean>()
+        val onPropertyChangedCallback = mock<Observable.OnPropertyChangedCallback> {
+            on { onPropertyChanged(any(), any()) }.then { _ ->
+                values += flightsViewModel.searching.get()
+                true
+            }
+        }
+        flightsViewModel.searching.addOnPropertyChangedCallback(onPropertyChangedCallback)
 
-        assertTrue(flightsViewModel.searching.get())
-        testObserver.await()
-        assertFalse(flightsViewModel.searching.get())
+        flightsViewModel.flights.test().await()
+
+        assertEquals(listOf(true, false), values)
     }
 
     @Test
@@ -83,12 +111,29 @@ class FlightsViewModelTest {
     }
 
     @Test
-    fun `flights should set error when request fails and return empty list`() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun `flights should set error and return empty list when request fails `() {
+        whenever(searchRepository.getFlights(searchData)).thenReturn(Single.error(RuntimeException()))
+
+        val test = flightsViewModel.flights.test()
+
+        test.assertValue(emptyList())
+        assertTrue(flightsViewModel.error.get())
     }
 
     @Test
     fun `flights should make request only once`() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val testA = flightsViewModel.flights.test().await()
+        val testB = flightsViewModel.flights.test().await()
+
+        testA.assertValue(listOf(flight))
+        testB.assertValue(listOf(flight))
+        verify(searchRepository, times(1)).getFlights(searchData)
+    }
+
+    @Test
+    fun `flight click should navigate to details activity`() {
+        flightsViewModel.flightClick(flight)
+
+        verify(navigator).navigateToFlightDetailsActivity(flight)
     }
 }

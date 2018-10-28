@@ -7,15 +7,21 @@ import androidx.recyclerview.widget.RecyclerView
 import eu.wawrzyczek.findflights.R
 import eu.wawrzyczek.findflights.databinding.ViewFlightItemBinding
 import eu.wawrzyczek.findflights.flights.model.Flight
+import androidx.recyclerview.widget.DiffUtil
+
+
 
 typealias ClickListener = (Flight) -> Unit
 
 class FlightsAdapter(private val clickListener: ClickListener) : RecyclerView.Adapter<FlightsAdapter.ViewHolder>() {
     private var items = emptyList<Flight>()
 
-    fun updateItems(items:List<Flight>) {
-        this.items = items
-        notifyDataSetChanged()
+    fun updateItems(newList: List<Flight>) {
+        val oldList = this.items
+        this.items = newList
+
+        val diffResult = DiffUtil.calculateDiff(FlightDiffCallback(oldList, newList))
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

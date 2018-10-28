@@ -29,7 +29,7 @@ class FlightsViewModel(
     }
     val empty = object : ObservableBoolean(searching, error) {
         override fun get(): Boolean {
-            return flightList.isEmpty() && !searching.get() && !error.get()
+            return super.get() && !searching.get() && !error.get()
         }
     }
 
@@ -45,6 +45,7 @@ class FlightsViewModel(
 
     private val currentFlights = BehaviorSubject.create<List<Flight>>()
     val flights: Observable<List<Flight>> = currentFlights
+        .doOnNext { empty.set(it.isEmpty()) }
 
     fun loadFlights() {
         disposables += Single.just(flightList)

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.wawrzyczek.findflights.R
 import eu.wawrzyczek.findflights.common.SimpleDateTime
@@ -63,6 +64,7 @@ class FlightsActivity : AppCompatActivity() {
     private fun prepareRecyclerView(binding: ActivityFlightsBinding) {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = flightsAdapter
+        binding.recyclerView.itemAnimator = DefaultItemAnimator()
         disposables += flightsViewModel.flights.subscribe {
             flightsAdapter.updateItems(it)
         }

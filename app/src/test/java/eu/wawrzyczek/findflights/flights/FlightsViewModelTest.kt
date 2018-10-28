@@ -154,4 +154,15 @@ class FlightsViewModelTest {
 
         test.assertValues(listOf(flight), emptyList(), listOf(flight))
     }
+
+    @Test
+    fun `filter price == 0 should be treated as no filters applied`() {
+        val test = flightsViewModel.flights.test()
+
+        flightsViewModel.loadFlights()
+        flightsViewModel.priceFilter.set(5)
+        flightsViewModel.priceFilter.set(0)
+
+        test.assertValues(listOf(flight), emptyList(), listOf(flight))
+    }
 }

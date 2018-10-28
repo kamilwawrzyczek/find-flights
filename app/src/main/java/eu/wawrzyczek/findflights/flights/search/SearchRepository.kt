@@ -28,8 +28,9 @@ class SearchRepository(private val client: SearchClient) {
                     .asSequence()
                     .filter { it.regularFare != null }
                     .map { flightDto ->
+                        val currency = Currency.getInstance(flightsDto.currency)
                         val priceMap = flightDto.regularFare!!.fares
-                            .associate { it.type to Price(it.amount.multiply(BigDecimal(it.count)), it.discountInPercent) }
+                            .associate { it.type to Price(it.amount.multiply(BigDecimal(it.count)), it.discountInPercent, currency) }
                         val fareClass = flightDto.regularFare.fareClass
                         val duration = flightDto.duration
                         val flightNumber = flightDto.flightNumber
@@ -37,7 +38,6 @@ class SearchRepository(private val client: SearchClient) {
                         val dateOut = convertDateToSimpleDateTime(tripDateDto.dateOut)
                         val origin = Station(code = tripDto.origin, name = tripDto.originName)
                         val destination = Station(code = tripDto.destination, name = tripDto.destinationName)
-                        val currency = Currency.getInstance(flightsDto.currency)
                         Flight(dateOut, flightNumber, duration, priceMap, currency, origin, destination, infantsLeft, fareClass)
                     }
                     .toList()

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="flight"
+            type="eu.wawrzyczek.findflights.flights.model.Flight" />
+
+        <variable
+            name="adultPrice"
+            type="eu.wawrzyczek.findflights.flights.model.Price" />
+
+        <variable
+            name="teensPrice"
+            type="eu.wawrzyczek.findflights.flights.model.Price" />
+
+        <variable
+            name="childsPrice"
+            type="eu.wawrzyczek.findflights.flights.model.Price" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        tools:context=".flights.details.FlightDetailsActivity">
+
+
+        <TextView
+            android:id="@+id/flightNumberLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/flight_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/flightDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/flight_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flightNumberLabel" />
+
+        <TextView
+            android:id="@+id/durationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/duration"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/destinationLabel" />
+
+        <TextView
+            android:id="@+id/fullPriceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/full_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/durationLabel" />
+
+        <TextView
+            android:id="@+id/originLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/origin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flightDateLabel" />
+
+        <TextView
+            android:id="@+id/destinationLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/destination"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/originLabel" />
+
+        <TextView
+            android:id="@+id/infantsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/infants_left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fullPriceLabel" />
+
+        <TextView
+            android:id="@+id/classLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/fare_class"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/infantsLabel" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="right"
+            app:constraint_referenced_ids="classLabel,infantsLabel,destinationLabel,originLabel,fullPriceLabel,durationLabel,flightDateLabel,flightNumberLabel,priceLabel,discountLabel"
+            tools:layout_editor_absoluteX="411dp" />
+
+        <TextView
+            android:id="@+id/flightNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{flight.flightNumber}"
+            app:layout_constraintStart_toStartOf="@id/barrier"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{flight.date.formattedString}"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/flightNumber" />
+
+        <TextView
+            android:id="@+id/origin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{flight.origin.name}"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/date" />
+
+        <TextView
+            android:id="@+id/destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{flight.destination.name}"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/origin" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{flight.duration}"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/destination" />
+
+        <TextView
+            android:id="@+id/fullPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{flight.priceFormatted}"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/duration" />
+
+        <TextView
+            android:id="@+id/infants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{`` + flight.infantsLeft}"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/fullPrice" />
+
+        <TextView
+            android:id="@+id/fareClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@{flight.fareClass}"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/infants" />
+
+        <TextView
+            android:id="@+id/adultsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/adults"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/teensLabel"
+            app:layout_constraintStart_toEndOf="@+id/barrier"
+            app:layout_constraintTop_toBottomOf="@+id/fareClass" />
+
+        <TextView
+            android:id="@+id/teensLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/teens"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/childsLabel"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/adultsLabel"
+            app:layout_constraintTop_toTopOf="@+id/adultsLabel" />
+
+        <TextView
+            android:id="@+id/childsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/childs"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/teensLabel"
+            app:layout_constraintTop_toTopOf="@+id/teensLabel" />
+
+        <TextView
+            android:id="@+id/priceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/adultsLabel" />
+
+        <TextView
+            android:id="@+id/discountLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/discount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/priceLabel" />
+
+        <TextView
+            android:id="@+id/priceAdult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{adultPrice.formatted}"
+            app:layout_constraintEnd_toEndOf="@+id/adultsLabel"
+            app:layout_constraintStart_toStartOf="@+id/adultsLabel"
+            app:layout_constraintTop_toTopOf="@+id/priceLabel" />
+
+        <TextView
+            android:id="@+id/priceTeens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{teensPrice.formatted}"
+            app:layout_constraintEnd_toEndOf="@+id/teensLabel"
+            app:layout_constraintStart_toStartOf="@+id/teensLabel"
+            app:layout_constraintTop_toTopOf="@+id/priceAdult" />
+
+        <TextView
+            android:id="@+id/priceChilds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{childsPrice.formatted}"
+            app:layout_constraintEnd_toEndOf="@+id/childsLabel"
+            app:layout_constraintStart_toStartOf="@+id/childsLabel"
+            app:layout_constraintTop_toTopOf="@+id/priceTeens" />
+
+        <TextView
+            android:id="@+id/discountAdults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/percent(adultPrice.discountPercent)}"
+            android:visibility="@{adultPrice != null}"
+            app:layout_constraintEnd_toEndOf="@+id/adultsLabel"
+            app:layout_constraintStart_toStartOf="@+id/adultsLabel"
+            app:layout_constraintTop_toTopOf="@+id/discountLabel" />
+
+        <TextView
+            android:id="@+id/discountTeens"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/percent(teensPrice.discountPercent)}"
+            android:visibility="@{teensPrice != null}"
+            app:layout_constraintEnd_toEndOf="@+id/teensLabel"
+            app:layout_constraintStart_toStartOf="@+id/teensLabel"
+            app:layout_constraintTop_toTopOf="@+id/discountAdults" />
+
+        <TextView
+            android:id="@+id/discountChilds"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:text="@{@string/percent(childsPrice.discountPercent)}"
+            android:visibility="@{childsPrice != null}"
+            app:layout_constraintEnd_toEndOf="@+id/childsLabel"
+            app:layout_constraintStart_toStartOf="@+id/childsLabel"
+            app:layout_constraintTop_toTopOf="@+id/discountTeens" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

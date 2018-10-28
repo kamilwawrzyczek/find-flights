@@ -24,6 +24,9 @@
         <activity
             android:name=".flights.FlightsActivity"
             android:parentActivityName=".search.FlightSearchActivity"/>
+        <activity android:name=".flights.details.FlightDetailsActivity"
+            android:label="@string/flight_details"
+            android:parentActivityName=".flights.FlightsActivity"/>
     </application>
 
 </manifest>

@@ -45,13 +45,14 @@ class SearchRepositoryTest {
 
     @Test
     fun `getFlights should map dto into model class`() {
+        val currency = Currency.getInstance("PLN")
         val date = SimpleDateTime(1970, 1, 1, 1, 0)
         val price = mapOf(
-            FareType.ADT to Price(BigDecimal(15), 25),
-            FareType.CHD to Price(BigDecimal(60), 20)
+            FareType.ADT to Price(BigDecimal(15), 25, currency),
+            FareType.CHD to Price(BigDecimal(60), 20, currency)
         )
         val expectedA = Flight(
-            date, "NR", "12:30", price, Currency.getInstance("PLN"),
+            date, "NR", "12:30", price, currency,
             Station("A", "AA"), Station("B", "BB"), 1, "W"
         )
         val expectedB = expectedA.copy(origin = Station("C", "CC"), destination = Station("D", "DD"))

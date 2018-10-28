@@ -10,8 +10,8 @@ import java.util.*
 
 fun createFlight(
     dateTime: SimpleDateTime = SimpleDateTime(2015, 5, 12, 12, 35),
-    price: Map<FareType, Price> = mapOf(FareType.ADT to Price(BigDecimal(12), 20)),
-    currency: String = "PLN"
+    currency: String = "PLN", price: Map<FareType, Price> = mapOf(FareType.ADT to Price(BigDecimal(12),
+        20, Currency.getInstance(currency)))
 ) = Flight(
     dateTime, "NR", "12:50", price, Currency.getInstance(currency), Station(), Station(),
     5, "W"

@@ -81,14 +81,17 @@ class FlightsViewModelTest {
     }
 
     @Test
-    fun `flights should get flights from repository`() {
+    fun `loadFlights should get flights from repository`() {
         val test = flightsViewModel.flights.test()
+
+        flightsViewModel.loadFlights()
+
         test.assertValue(listOf(flight))
         verify(searchRepository).getFlights(searchData)
     }
 
     @Test
-    fun `flights should set progress to true on start and to false on stop`() {
+    fun `loadFlights should set progress to true on start and to false on stop`() {
         val values = mutableListOf<Boolean>()
         val onPropertyChangedCallback = mock<Observable.OnPropertyChangedCallback> {
             on { onPropertyChanged(any(), any()) }.then { _ ->
@@ -98,35 +101,39 @@ class FlightsViewModelTest {
         }
         flightsViewModel.searching.addOnPropertyChangedCallback(onPropertyChangedCallback)
 
-        flightsViewModel.flights.test().await()
+        flightsViewModel.loadFlights()
 
         assertEquals(listOf(true, false), values)
     }
 
     @Test
-    fun `flights should clean error when success`() {
+    fun `loadFlights should clean error when success`() {
         flightsViewModel.error.set(true)
-        flightsViewModel.flights.test().await()
+
+        flightsViewModel.loadFlights()
+
         assertFalse(flightsViewModel.error.get())
     }
 
     @Test
-    fun `flights should set error and return empty list when request fails `() {
+    fun `loadFlights should set error and return empty list when request fails `() {
         whenever(searchRepository.getFlights(searchData)).thenReturn(Single.error(RuntimeException()))
 
         val test = flightsViewModel.flights.test()
+        flightsViewModel.loadFlights()
 
         test.assertValue(emptyList())
         assertTrue(flightsViewModel.error.get())
     }
 
     @Test
-    fun `flights should make request only once`() {
-        val testA = flightsViewModel.flights.test().await()
-        val testB = flightsViewModel.flights.test().await()
+    fun `loadFlights should make request only once`() {
+        val test = flightsViewModel.flights.test()
 
-        testA.assertValue(listOf(flight))
-        testB.assertValue(listOf(flight))
+        flightsViewModel.loadFlights()
+        flightsViewModel.loadFlights()
+
+        test.assertValues(listOf(flight), listOf(flight))
         verify(searchRepository, times(1)).getFlights(searchData)
     }
 

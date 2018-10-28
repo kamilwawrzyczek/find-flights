@@ -44,13 +44,19 @@ class FlightsActivity : AppCompatActivity() {
 
         val data = flightsViewModel.searchData
         title = data.origin.name + " > " + data.destination.name
+    }
 
+    override fun onStart() {
+        super.onStart()
         flightsViewModel.loadFlights()
+        disposables += flightsViewModel.flights.subscribe {
+            flightsAdapter.updateItems(it)
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        disposables.dispose()
+        disposables.clear()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -65,8 +71,5 @@ class FlightsActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = flightsAdapter
         binding.recyclerView.itemAnimator = DefaultItemAnimator()
-        disposables += flightsViewModel.flights.subscribe {
-            flightsAdapter.updateItems(it)
-        }
     }
 }

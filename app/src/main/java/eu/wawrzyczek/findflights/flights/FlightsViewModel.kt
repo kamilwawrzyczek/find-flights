@@ -59,7 +59,7 @@ class FlightsViewModel(
     }
 
     private fun applyFilter(priceFilter : Int) {
-        currentFlights.onNext(flightList.filter { flight -> flight.price.values.none { it.amount > priceFilter.toBigDecimal() } })
+        currentFlights.onNext(flightList.filter { flight -> flight.fullPrice <= priceFilter.toBigDecimal() })
     }
 
     private fun getFlightsFromRepository(): Single<List<Flight>> {

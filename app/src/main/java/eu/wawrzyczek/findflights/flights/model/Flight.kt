@@ -21,10 +21,12 @@ data class Flight(
     val fareClass: String
 ) : Parcelable {
     @IgnoredOnParcel
+    val fullPrice = price.values.map { it.amount }
+        .reduce { a, b -> a + b }
+
+    @IgnoredOnParcel
     val priceFormatted: String by lazy {
         val format = DecimalFormat("0.00")
-        val priceSum = price.values.map { it.amount }
-            .reduce { a, b -> a + b }
-        format.format(priceSum) + currency.symbol
+        format.format(fullPrice) + currency.symbol
     }
 }

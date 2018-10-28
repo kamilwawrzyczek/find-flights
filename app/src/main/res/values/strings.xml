@@ -41,5 +41,5 @@
         <item quantity="one">%d child</item>
         <item quantity="other">%d childs</item>
     </plurals>
-
+    <string name="max_price">Max ticket price: %d</string>
 </resources>

@@ -38,12 +38,13 @@ class FlightsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<ActivityFlightsBinding>(this, R.layout.activity_flights)
         binding.vm = flightsViewModel
-        binding.tryAgain.setOnClickListener { loadFlights() }
+        binding.tryAgain.setOnClickListener { flightsViewModel.loadFlights() }
         prepareRecyclerView(binding)
 
-        loadFlights()
         val data = flightsViewModel.searchData
         title = data.origin.name + " > " + data.destination.name
+
+        flightsViewModel.loadFlights()
     }
 
     override fun onStop() {
@@ -62,11 +63,8 @@ class FlightsActivity : AppCompatActivity() {
     private fun prepareRecyclerView(binding: ActivityFlightsBinding) {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = flightsAdapter
-    }
-
-    private fun loadFlights() {
-        disposables.clear()
-        disposables += flightsViewModel.flights
-            .subscribe { items -> flightsAdapter.updateItems(items) }
+        disposables += flightsViewModel.flights.subscribe {
+            flightsAdapter.updateItems(it)
+        }
     }
 }

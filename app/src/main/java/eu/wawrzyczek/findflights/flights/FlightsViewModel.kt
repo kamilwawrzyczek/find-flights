@@ -1,17 +1,25 @@
 package eu.wawrzyczek.findflights.flights
 
 import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableInt
 import androidx.lifecycle.ViewModel
 import eu.wawrzyczek.findflights.common.AppNavigator
+import eu.wawrzyczek.findflights.common.plusAssign
 import eu.wawrzyczek.findflights.common.toAsync
 import eu.wawrzyczek.findflights.flights.model.Flight
 import eu.wawrzyczek.findflights.flights.search.SearchRepository
 import eu.wawrzyczek.findflights.search.model.SearchData
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
 
-class FlightsViewModel(val searchData: SearchData, private val searchRepository: SearchRepository,
-                       private val navigator: AppNavigator) : ViewModel() {
-    private var flightList = emptyList<Flight>()
+private const val DEFAULT_PRICE_FILTER = 150
+
+class FlightsViewModel(
+    val searchData: SearchData, private val searchRepository: SearchRepository,
+    private val navigator: AppNavigator
+) : ViewModel() {
 
     val searching = ObservableBoolean()
     val error = object : ObservableBoolean(searching) {
@@ -25,10 +33,33 @@ class FlightsViewModel(val searchData: SearchData, private val searchRepository:
         }
     }
 
-    val flights: Single<List<Flight>>
-        get() = Single.just(flightList)
+    val priceFilter = object: ObservableInt(DEFAULT_PRICE_FILTER) {
+        override fun set(value: Int) {
+            super.set(value)
+            applyFilter(value)
+        }
+    }
+
+    private var flightList = emptyList<Flight>()
+    private val disposables: CompositeDisposable = CompositeDisposable()
+
+    private val currentFlights = BehaviorSubject.create<List<Flight>>()
+    val flights: Observable<List<Flight>> = currentFlights
+
+    fun loadFlights() {
+        disposables += Single.just(flightList)
             .filter { it.isNotEmpty() }
             .switchIfEmpty(getFlightsFromRepository())
+            .subscribe { _ -> applyFilter(priceFilter.get()) }
+    }
+
+    fun flightClick(flight: Flight) {
+        navigator.navigateToFlightDetailsActivity(flight)
+    }
+
+    private fun applyFilter(priceFilter : Int) {
+        currentFlights.onNext(flightList.filter { flight -> flight.price.values.none { it.amount > priceFilter.toBigDecimal() } })
+    }
 
     private fun getFlightsFromRepository(): Single<List<Flight>> {
         return Single.defer { searchRepository.getFlights(searchData) }
@@ -43,8 +74,7 @@ class FlightsViewModel(val searchData: SearchData, private val searchRepository:
             .toAsync()
     }
 
-    fun flightClick(flight: Flight) {
-        navigator.navigateToFlightDetailsActivity(flight)
+    override fun onCleared() {
+        disposables.clear()
     }
-
 }

@@ -20,7 +20,6 @@ class FlightSearchViewModel(
 ) : ViewModel() {
     var stationsMap: Map<String, Station> = emptyMap()
 
-    //todo show error when not valid
     val origin: ObservableField<Station> = object : ObservableField<Station>(Station()) {
         override fun set(value: Station) {
             super.set(stationsMap.getOrElse(value.name) { value })

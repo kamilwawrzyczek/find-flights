@@ -143,4 +143,15 @@ class FlightsViewModelTest {
 
         verify(navigator).navigateToFlightDetailsActivity(flight)
     }
+
+    @Test
+    fun `setting price filter should return flights with ticket price less then provided value`() {
+        val test = flightsViewModel.flights.test()
+
+        flightsViewModel.loadFlights()
+        flightsViewModel.priceFilter.set(5)
+        flightsViewModel.priceFilter.set(15)
+
+        test.assertValues(listOf(flight), emptyList(), listOf(flight))
+    }
 }
